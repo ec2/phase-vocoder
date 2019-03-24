@@ -17,18 +17,21 @@
       </div>
     </div>
     <div id="inputs">
-      <table style="width:100%">
+      <table id="inputs_table" style="width:100%">
         <tr>
-        <th>a</th>
-        <th>b</th> 
-        <th>pitch</th>
+          <th>a</th>
+          <th>b</th> 
+          <th>pitch</th>
+          <th><button id="inputs_add">Add</button></th>
         </tr>
         <tr>
-          <td><input></input></td>
-          <td><input></input></td>
-          <td><input></input></td>
+          <td><input id="inputs_a_1"></input></td>
+          <td><input id="inputs_b_1"></input></td>
+          <td><input id="inputs_pitch_1"></input></td>
+          <td><button id="inputs_remove_1">Remove</button></td>
         </tr>
-        </table>
+      </table>
+      <button id="inputs_submit">Submit</button>
     </div>
     <script>
       // You can also require other files to run in this process
