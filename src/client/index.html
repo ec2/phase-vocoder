@@ -13,25 +13,21 @@
       <div id="wave-timeline"></div>
       <div id="menu-bar">
         <div id="menu-bar_progress">0:00</div>
-        <button id="button_play_pause">Play/Pause</button>
+        <button id="button_play_pause" type="button">Play/Pause</button>
       </div>
     </div>
     <div id="inputs">
-      <table id="inputs_table" style="width:100%">
-        <tr>
-          <th>a</th>
-          <th>b</th> 
-          <th>pitch</th>
-          <th><button id="inputs_add">Add</button></th>
-        </tr>
-        <tr>
-          <td><input id="inputs_a_1"></input></td>
-          <td><input id="inputs_b_1"></input></td>
-          <td><input id="inputs_pitch_1"></input></td>
-          <td><button id="inputs_remove_1">Remove</button></td>
-        </tr>
-      </table>
-      <button id="inputs_submit">Submit</button>
+      <form action="127.0.0.1" method="post">
+        <table id="inputs_table" style="width:100%">
+          <tr>
+            <th>a</th>
+            <th>b</th> 
+            <th>pitch</th>
+            <th><button id="inputs_add" type="button">Add</button></th>
+          </tr>
+        </table>
+        <button id="inputs_submit" type="submit">Submit</button>
+      </form>
     </div>
     <script>
       // You can also require other files to run in this process
