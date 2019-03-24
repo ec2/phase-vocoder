@@ -7,11 +7,29 @@
   </head>
   <body>
     <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
     <input id="audioFileChooser" type="file">
-
+    <div>
+      <div id="waveform"></div>
+      <div id="wave-timeline"></div>
+      <div id="menu-bar">
+        <div id="menu-bar_progress">0:00</div>
+        <button id="button_play_pause">Play/Pause</button>
+      </div>
+    </div>
+    <div id="inputs">
+      <table style="width:100%">
+        <tr>
+        <th>a</th>
+        <th>b</th> 
+        <th>pitch</th>
+        </tr>
+        <tr>
+          <td><input></input></td>
+          <td><input></input></td>
+          <td><input></input></td>
+        </tr>
+        </table>
+    </div>
     <script>
       // You can also require other files to run in this process
       require('./renderer.js')

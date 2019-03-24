@@ -306,11 +306,6 @@ hosted-git-info@^2.1.4:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
   integrity sha512-7T/BxH19zbcCTa8XkMlbK5lTo1WtgkFi3GvdWEyNuc4Vex7/9Dqbnpsf4JMydcfj9HCg4zUWFTL3Za6lapg5/w==
 
-howler@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/howler/-/howler-2.1.1.tgz#b8ae44b83f4b8a5b5ef354030ed0927314d8a996"
-  integrity sha512-9nwyDCGxhAGMmNXDfMLv0M/uS/WUg2//jG6t96D8DqbbsVZgXQzsP/ZMItbWO/Fqg7Gg69kOv3xVSDzJdd7aqA==
-
 http-signature@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/http-signature/-/http-signature-1.2.0.tgz#9aecd925114772f3d95b65a60abb8f7c18fbace1"
@@ -947,6 +942,11 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+wavesurfer@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/wavesurfer/-/wavesurfer-1.3.4.tgz#17908abd20da11a8db460c5a176679621d519bfa"
+  integrity sha1-F5CKvSDaEajbRgxaF2Z5Yh1Rm/o=
 
 xtend@~2.1.1:
   version "2.1.2"

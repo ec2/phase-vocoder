@@ -17,7 +17,9 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^4.1.1",
-    "howler": "^2.1.1"
+    "electron": "^4.1.1"
+  },
+  "dependencies": {
+    "wavesurfer": "^1.3.4"
   }
 }
