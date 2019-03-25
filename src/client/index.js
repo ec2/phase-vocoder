@@ -1,30 +1,33 @@
-var WaveSurfer = require('wavesurfer')
 var TimelinePlugin = require('./node_modules/wavesurfer/plugin/wavesurfer.timeline.js');
-
 var uuidv4 = require('uuid/v4')
+var WaveSurfer = require('wavesurfer')
 
 let wavesurfer = null
 let numInputs = 0
 
-const status = {
-	playing: false,
-}
-
 function readFile(event) {
+	/*
+	Handler for the "Choose file" button.
+	It reads the file into base64 encoding and sends this to the ??? endpoint.
+	It also loads the file for WaveSurfer for playing and seeking.
+	*/
 	var fileReader = new FileReader();
-	console.log(event)
-	test = fileReader.readAsDataURL(event.target.files[0])
+	const path = event.target.files[0].path
+	fileReader.readAsDataURL(event.target.files[0])
 	// TODO: send fileReader.result to the backend
 	fileReader.onload = () => { console.log(fileReader.result) } 
-	const path = event.target.files[0].path
+
+
 	wavesurfer = WaveSurfer.create({
 	    container: '#waveform',
 	});
+
 	WaveSurfer.Timeline.init({
 		wavesurfer: wavesurfer,
 		container: "#wave-timeline"
 	});
-	// Testing!
+
+	// Load the uploaded file
 	wavesurfer.load(path);
 	wavesurfer.on('ready', function () {
 		console.log('yes!')
@@ -32,7 +35,9 @@ function readFile(event) {
 }
 
 function addInput(num) {
-	console.log('hi', num)
+	/*
+	Adds a row of input [a, b, pitch]
+	*/
 	var inputLine = document.createElement("tr");
 	var cell = document.createElement("td");
 
@@ -40,6 +45,11 @@ function addInput(num) {
 	var bInput = document.createElement("input")
 	var pitchInput = document.createElement("input")
 
+	// set some field restrictions
+	// TODO: reflect these restrictions on the frontend
+	const timePattern = "[0-9]+\.?[0-9]*"
+	aInput.pattern = timePattern
+	bInput.pattern = timePattern
 	pitchInput.pattern= "[A-Ga-g][1-9](#|B|b)?"
 
 	var removeButton = document.createElement('button')
@@ -64,17 +74,22 @@ function addInput(num) {
 	bCell.appendChild(bInput)
 	pitchCell.appendChild(pitchInput)
 	removeButtonCell.appendChild(removeButton)
-	console.log('set table')
 	numInputs += 1
 }
 
 function removeInput(event) {
+	/*
+	Removes a particular row of input
+	*/
 	var rowNum = event.target.id.split('_')[2]
 	var toRemove = document.getElementById(`inputs_row_${rowNum}`)
 	toRemove.remove()
 }
 
 function submit(event) {
+	/*
+	Gets the form data and sends it to the ??? endpoint
+	*/
 	const len = event.target.length
 	var pitch_shifts = []
 	for (var i = 0; i < len; i++) {
