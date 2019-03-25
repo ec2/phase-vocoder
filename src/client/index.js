@@ -42,46 +42,10 @@ function readFile(event) {
 	    // })
 	}).then(
 		// DO SOMETHING
-	    response => response.text() // .json(), etc.
+	    // response => response.text() // .json(), etc.
 	    // same as function(response) {return response.text();}
-	).then(
-	    html => console.log(html)
-	);
-	/*
-	fileReader.readAsDataURL(event.target.files[0])
-	// TODO: send fileReader.result to the backend
-		const url = "http://127.0.0.1:3000/detect_pitch";
-		const fileData = fileReader.result
-			
-		const hash = new SHA3(256);
- 
-		hash.update(fileData);
-		
-		const payload = {
-			'file': fileData,
-			'id:': hash.digest('hex'),
-		}
-
-		fetch(url, {
-		    method : "POST",
-		    headers: {
-	            "Content-Type": "application/json",
-	        },
-		    body: JSON.stringify(payload),
-		    // -- or --
-		    // body : JSON.stringify({
-		        // user : document.getElementById('user').value,
-		        // ...
-		    // })
-		}).then(
-			// DO SOMETHING
-		    response => response.text() // .json(), etc.
-		    // same as function(response) {return response.text();}
-		).then(
-		    html => console.log(html)
-		);
-	}
-	*/
+	    console.log('woo')
+	)
 
 	wavesurfer = WaveSurfer.create({
 	    container: '#waveform',
@@ -98,7 +62,6 @@ function readFile(event) {
 		console.log('yes!')
 	})
 	event.preventDefault()
-	selectForm.submit()
 }
 
 function addInput(num) {
