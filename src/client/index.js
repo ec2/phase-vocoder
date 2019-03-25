@@ -10,9 +10,13 @@ const status = {
 	playing: false,
 }
 
-function readFile(files) {
+function readFile(event) {
 	var fileReader = new FileReader();
-
+	console.log(event)
+	test = fileReader.readAsDataURL(event.target.files[0])
+	// TODO: send fileReader.result to the backend
+	fileReader.onload = () => { console.log(fileReader.result) } 
+	const path = event.target.files[0].path
 	wavesurfer = WaveSurfer.create({
 	    container: '#waveform',
 	});
@@ -21,7 +25,7 @@ function readFile(files) {
 		container: "#wave-timeline"
 	});
 	// Testing!
-	wavesurfer.load('violin-cut.wav');
+	wavesurfer.load(path);
 	wavesurfer.on('ready', function () {
 		console.log('yes!')
 	})
