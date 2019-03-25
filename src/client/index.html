@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Phase Vocoder</title>
+    <script type="text/javascript" src="index.js"></script>
+  </head>
+  <body>
+    <!-- All of the Node.js APIs are available in this renderer process. -->
+    <input id="audioFileChooser" type="file">
+    <div>
+      <div id="waveform"></div>
+      <div id="wave-timeline"></div>
+      <div id="menu-bar">
+        <div id="menu-bar_progress">0:00</div>
+        <button id="button_play_pause" type="button">Play/Pause</button>
+      </div>
+    </div>
+    <div id="inputs">
+      <form id="form" method="post">
+        <table id="inputs_table" style="width:100%">
+          <tr>
+            <th>a</th>
+            <th>b</th> 
+            <th>pitch</th>
+            <th><button id="inputs_add" type="button">Add</button></th>
+          </tr>
+        </table>
+        <button id="inputs_submit" type="submit">Submit</button>
+      </form>
+    </div>
+    <script>
+      // You can also require other files to run in this process
+      require('./renderer.js')
+    </script>
+  </body>
+</html>
