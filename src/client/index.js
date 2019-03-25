@@ -1,9 +1,13 @@
 var WaveSurfer = require('wavesurfer')
 var TimelinePlugin = require('./node_modules/wavesurfer/plugin/wavesurfer.timeline.js');
-var uuidv4 = require('uuid/v4')
+var { SHA3 } = require('sha3')
 
 let wavesurfer = null
 let numInputs = 0
+
+// detect_pitch (POST) -> uploads file, returns a csv file
+
+// correct_pitch (GET) -> uuid, intervals, pitches, returns audio file b64
 
 function readFile(event) {
 	/*
@@ -15,8 +19,50 @@ function readFile(event) {
 	const path = event.target.files[0].path
 	fileReader.readAsDataURL(event.target.files[0])
 	// TODO: send fileReader.result to the backend
-	fileReader.onload = () => { console.log(fileReader.result) } 
-
+	fileReader.onload = () => {
+		/*
+		var req = new XMLHttpRequest();
+		const postUrl = 'http://127.0.0.1' // TODO
+		req.open("POST", postUrl);
+		req.send({ 'b64_audio': fileReader.result });
+		xhr.onload = function (e) {
+			if (xhr.readyState === XMLHttpRequest.DONE) {
+				if (xhr.status === 200) {
+					// DO SOMETHING
+					console.log(xhr.responseText);
+				} else {
+					console.error(xhr.statusText);
+				}
+			}
+		};
+		*/
+		const url = "http://127.0.0.1";
+		const fileData = fileReader.result
+			
+		const hash = new SHA3(256);
+ 
+		hash.update(fileData);
+		
+		const payload = {
+			'file': fileData,
+			'id:': hash.digest('hex'),
+		}
+		fetch(url, {
+		    method : "POST",
+		    body: JSON.stringify(payload),
+		    // -- or --
+		    // body : JSON.stringify({
+		        // user : document.getElementById('user').value,
+		        // ...
+		    // })
+		}).then(
+			// DO SOMETHING
+		    response => response.text() // .json(), etc.
+		    // same as function(response) {return response.text();}
+		).then(
+		    html => console.log(html)
+		);
+	}
 
 	wavesurfer = WaveSurfer.create({
 	    container: '#waveform',
@@ -107,6 +153,23 @@ function submit(event) {
 		'id': uuidv4(),
 		pitch_shifts,
 	}
+
+	const url = "http://127.0.0.1";
+	fetch(url, {
+	    method : "GET",
+	    body: JSON.stringify(payload),
+	    // -- or --
+	    // body : JSON.stringify({
+	        // user : document.getElementById('user').value,
+	        // ...
+	    // })
+	}).then(
+		// DO SOMETHING
+	    response => response.text() // .json(), etc.
+	    // same as function(response) {return response.text();}
+	).then(
+	    html => console.log(html)
+	);
 
 	// don't submit for now TODO
 	event.preventDefault()
