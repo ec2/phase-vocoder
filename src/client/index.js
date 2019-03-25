@@ -15,9 +15,13 @@ function readFile(event) {
 	It reads the file into base64 encoding and sends this to the ??? endpoint.
 	It also loads the file for WaveSurfer for playing and seeking.
 	*/
+	console.log('readfile')
+	event.preventDefault()
 	var fileReader = new FileReader();
-	const path = event.target.files[0].path
+	// const path = event.target.files[0].path
 	var selectForm = document.forms[0];
+	const path = selectForm.sampleFile.files[0].path
+	console.log('readfile', path)
 
 	console.log(selectForm)
 	// const hash = new SHA3(256);
@@ -25,6 +29,21 @@ function readFile(event) {
 	// hash.update(fileData);
 
 	// selectForm.uid = hash.digest('hex')
+
+	wavesurfer = WaveSurfer.create({
+	    container: '#waveform',
+	});
+
+	WaveSurfer.Timeline.init({
+		wavesurfer: wavesurfer,
+		container: "#wave-timeline"
+	});
+
+	// Load the uploaded file
+	wavesurfer.load(path);
+	wavesurfer.on('ready', function () {
+		console.log('yes!')
+	})
 
 	const url = "http://127.0.0.1:3000/detect_pitch"
 	const formData = new FormData(selectForm)
@@ -46,21 +65,6 @@ function readFile(event) {
 	    // same as function(response) {return response.text();}
 	    console.log('woo')
 	)
-
-	wavesurfer = WaveSurfer.create({
-	    container: '#waveform',
-	});
-
-	WaveSurfer.Timeline.init({
-		wavesurfer: wavesurfer,
-		container: "#wave-timeline"
-	});
-
-	// Load the uploaded file
-	wavesurfer.load(path);
-	wavesurfer.on('ready', function () {
-		console.log('yes!')
-	})
 	event.preventDefault()
 }
 
@@ -165,7 +169,7 @@ window.addEventListener("load",
 
 		// Upload button
 		var uploadButton = document.getElementById('audioFileChooser')
-		uploadButton.onchange = readFile
+		uploadButton.onclick = readFile
 
 		// Play/Pause
 		var playPauseButton = document.getElementById('button_play_pause')

@@ -9,7 +9,7 @@
     <!-- All of the Node.js APIs are available in this renderer process. -->
     <form action="http://127.0.0.1:3000/detect_pitch" method="post" enctype="multipart/form-data">
       <input type="file" name="sampleFile" accept=".wav">
-      <input type="submit" value="Upload File" id="audioFileChooser">
+      <button type="button" id="audioFileChooser">Upload File</button>
     </form>
     <div>
       <div id="waveform"></div>
