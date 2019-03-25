@@ -60,7 +60,10 @@ function readFile(event) {
 		// DO SOMETHING
 	    // response => response.text() // .json(), etc.
 	    // same as function(response) {return response.text();}
-	    console.log('woo')
+	    function(response) {
+	    	console.log(response)
+	    	console.log('woo')
+	    }
 	)
 	event.preventDefault()
 }
@@ -135,13 +138,13 @@ function submit(event) {
 		i += 2
 	}
 	const payload = {
-		'id': uuidv4(),
 		pitch_shifts,
 	}
+	console.log(payload)
 
-	const url = "http://127.0.0.1";
+	const url = "http://0.0.0.0:3000/correct_pitch";
 	fetch(url, {
-	    method : "GET",
+	    method : "POST",
 	    body: JSON.stringify(payload),
 	    // -- or --
 	    // body : JSON.stringify({
