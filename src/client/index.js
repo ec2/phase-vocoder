@@ -109,7 +109,7 @@ window.addEventListener("load",
 		var progress = document.getElementById('menu-bar_progress')
 		setInterval(
 			() => { 
-				if (wavesurfer && wavesurfer.isPlaying()) {
+				if (wavesurfer) {
 					progress.innerHTML = `${wavesurfer.getCurrentTime()}` 
 				}
 			},
