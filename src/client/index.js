@@ -4,6 +4,7 @@ var { SHA3 } = require('sha3')
 
 let wavesurfer = null
 let numInputs = 0
+let currentUid = null
 
 // detect_pitch (POST) -> uploads file, returns a csv file
 
@@ -62,7 +63,7 @@ function readFile(event) {
 	    // same as function(response) {return response.text();}
 	    function(response) {
 	    	console.log(response)
-	    	console.log('woo')
+	    	currentUid = response.uid
 	    }
 	)
 	event.preventDefault()
@@ -138,6 +139,7 @@ function submit(event) {
 		i += 2
 	}
 	const payload = {
+		uid: currentUid,
 		pitch_shifts,
 	}
 	console.log(payload)
