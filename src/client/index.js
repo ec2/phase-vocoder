@@ -50,9 +50,6 @@ function readFile(event) {
 
 	fetch(url, {
 	    method : "POST",
-	    headers: {
-            "Content-Type": "multipart/form-data",
-        },
 	    body: formData,
 	    // -- or --
 	    // body : JSON.stringify({
