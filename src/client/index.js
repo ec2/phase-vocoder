@@ -20,11 +20,33 @@ function readFile(event) {
 	var selectForm = document.forms[0];
 
 	console.log(selectForm)
-	const hash = new SHA3(256);
+	// const hash = new SHA3(256);
  
-	hash.update(fileData);
+	// hash.update(fileData);
 
-	selectForm.uid = hash.digest('hex')
+	// selectForm.uid = hash.digest('hex')
+
+	const url = "http://127.0.0.1:3000/detect_pitch"
+	const formData = new FormData(selectForm)
+
+	fetch(url, {
+	    method : "POST",
+	    headers: {
+            "Content-Type": "multipart/form-data",
+        },
+	    body: formData,
+	    // -- or --
+	    // body : JSON.stringify({
+	        // user : document.getElementById('user').value,
+	        // ...
+	    // })
+	}).then(
+		// DO SOMETHING
+	    response => response.text() // .json(), etc.
+	    // same as function(response) {return response.text();}
+	).then(
+	    html => console.log(html)
+	);
 	/*
 	fileReader.readAsDataURL(event.target.files[0])
 	// TODO: send fileReader.result to the backend
@@ -75,6 +97,7 @@ function readFile(event) {
 	wavesurfer.on('ready', function () {
 		console.log('yes!')
 	})
+	event.preventDefault()
 	selectForm.submit()
 }
 
