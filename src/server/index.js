@@ -2,6 +2,7 @@
 
 const express = require('express');
 const fileUpload = require('express-fileupload');
+const bodyParser = require ('body-parser')
 
 const fs = require('fs');
 const path = require('path');
@@ -11,14 +12,20 @@ const app = express();
 const exec = require('child_process').exec;
 
 app.use((request, response, next) => {
-    console.log(request.headers)
+    //console.log(request.headers)
     next()
 })
+
+
+
 
 app.use(fileUpload({
     useTempFiles : true,
     tempFileDir : '/tmp/'
 }));
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 app.get('/', (request, response) => {
     response.json({
@@ -26,31 +33,44 @@ app.get('/', (request, response) => {
     })
 })
 
+console.log(__dirname)
 
-
-app.post('/detect_pitch', (req, res) =>{
+app.post('/detect_pitch', (req, res) =>{        
     if (Object.keys(req.files).length == 0) {
         return res.status(400).send('No files were uploaded.');
     }
+    console.log("REQ FILES ", req.files)
     let sampleFile = req.files.sampleFile;
-    const uid = req.uid;
-    console.log('UID: ', uid)
-    sampleFile.mv(`/tmp/${uid}.jpg`, function(err) {
-        if (err)
-          return res.status(500).send(err);
-        dir = exec(`ls`, function (err, stdout, stderr) {
+    let uid = sampleFile.md5
+
+    // Saves uploaded file into /tmp/<UID>/
+    fs.mkdirSync(`/tmp/${uid}`)
+    sampleFile.mv(`/tmp/${uid}/${uid}.wav`, function(err) {
+        if (err){
+            console.log(err)
+            return res.status(500).send(err);
+        }
+        // run the octave script in a shell
+        dir = exec(`cd /root/phase-vocoder/src/octave-src/ && /root/phase-vocoder/src/octave-src/run_pitch_detection.m ${uid}`, function (err, stdout, stderr) {
             if (err) {
+                console.log (err)
                 return res.status(666).send(err);
             }
-            fs.readFile(`/tmp/${uid}.csv`, (err, data) => {
+            // reads the csv file to be returned. 
+            fs.readFile(`/tmp/${uid}/${uid}.csv`, (err, data) => {
                 if(err){
+                    console.log(err)
                     return res.send(667).send(err);
                 }
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.write(data);
-                res.end();
+                const returnObj = {
+                    code: 200,
+                    pitch: data.toString(),
+                    uid: uid
+                }
+                console.log("response!")
+                res.send (JSON.stringify(returnObj))
             });
-        }); 
+        });
     });
 });
 
@@ -60,7 +80,7 @@ app.get('/correct_pitch', (req, res) => {
     const uid = req.uid;
     const correction = req.corrections;
 
-    
+
 });
 
 

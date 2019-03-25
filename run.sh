@@ -1,2 +1,2 @@
 #! /bin/sh
-docker run -it -v $PWD:/root/phase-vocoder tueric/phase-vocoder  
+docker run -it -p 3000:3000 -v $PWD:/root/phase-vocoder tueric/phase-vocoder  
