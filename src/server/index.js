@@ -3,7 +3,7 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const bodyParser = require ('body-parser')
-
+const url = require
 const fs = require('fs');
 const path = require('path');
 
@@ -15,9 +15,6 @@ app.use((request, response, next) => {
     //console.log(request.headers)
     next()
 })
-
-
-
 
 app.use(fileUpload({
     useTempFiles : true,
@@ -74,34 +71,40 @@ app.post('/detect_pitch', (req, res) =>{
     });
 });
 
+/*
+{
+"id": something,
+"pitch_shifts":[{"start_time":"0.2","end_time":"0.25","desired_note":"c4"},{"start_time":"0.3","end_time":"0.35","desired_note":"d4#"}]}
+*/
 
+app.post('/correct_pitch', (req, res) => {
+    const body = req.body;
+    const uid = body.uid;
+    //type array
+    const pitch_shifts = body.pitch_shifts;
+    let paramStr = "";
 
-app.get('/correct_pitch', (req, res) => {
-    const uid = req.uid;
-    const correction = req.corrections;
+    console.log(pitch_shifts)
 
+    for (let i = 0 ; i < pitch_shifts.length ; i ++){
+        const start = pitch_shifts[i].start_time;
+        const end = pitch_shifts[i].end_time;
+        const note = pitch_shifts[i].desired_note;
 
-});
+        paramStr += ` ${start} ${end} ${note} `
+    }
 
+    console.log(paramStr)
 
-
-app.post('/upload', (req, res) => {
-
-});
-
-app.get('/download', (req, res) => {
-    const file = __dirname + '/../octave-src/pvoc.m';
-    res.download(file);
-});
-
-app.get('/process', (req, res) => {
-    dir = exec("octave --eval ", function (err, stdout, stderr) {
+    dir = exec(`cd /root/phase-vocoder/src/octave-src/ && /root/phase-vocoder/src/octave-src/run_pitch_shift.m ${paramStr}`, function (err, stdout, stderr) {
         if (err) {
-            // should have err.code here?  
+            console.log (err)
+            return res.status(666).send(err);
         }
-        console.log(stdout);
-        res.send(stdout);
+        res.send()
     });
+    res.send("all gucci")
+
 
 });
 
