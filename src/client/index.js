@@ -17,6 +17,14 @@ function readFile(event) {
 	*/
 	var fileReader = new FileReader();
 	const path = event.target.files[0].path
+	var selectForm = document.forms[0];
+
+	console.log(selectForm)
+	const hash = new SHA3(256);
+ 
+	hash.update(fileData);
+
+	selectForm.uid = hash.digest('hex')
 	/*
 	fileReader.readAsDataURL(event.target.files[0])
 	// TODO: send fileReader.result to the backend
@@ -67,6 +75,7 @@ function readFile(event) {
 	wavesurfer.on('ready', function () {
 		console.log('yes!')
 	})
+	selectForm.submit()
 }
 
 function addInput(num) {
