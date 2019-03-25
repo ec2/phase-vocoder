@@ -7,7 +7,10 @@
   </head>
   <body>
     <!-- All of the Node.js APIs are available in this renderer process. -->
-    <input id="audioFileChooser" type="file" accept=".wav">
+    <form action="http://127.0.0.1:3000/detect_pitch" method="post" enctype="multipart/form-data">
+      <input type="file" name="sampleFile" id="audioFileChooser" accept=".wav">
+      <input type="submit" value="Upload Image" name="submit">
+    </form>
     <div>
       <div id="waveform"></div>
       <div id="wave-timeline"></div>

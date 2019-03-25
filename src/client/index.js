@@ -17,25 +17,9 @@ function readFile(event) {
 	*/
 	var fileReader = new FileReader();
 	const path = event.target.files[0].path
+	/*
 	fileReader.readAsDataURL(event.target.files[0])
 	// TODO: send fileReader.result to the backend
-	fileReader.onload = () => {
-		/*
-		var req = new XMLHttpRequest();
-		const postUrl = 'http://127.0.0.1' // TODO
-		req.open("POST", postUrl);
-		req.send({ 'b64_audio': fileReader.result });
-		xhr.onload = function (e) {
-			if (xhr.readyState === XMLHttpRequest.DONE) {
-				if (xhr.status === 200) {
-					// DO SOMETHING
-					console.log(xhr.responseText);
-				} else {
-					console.error(xhr.statusText);
-				}
-			}
-		};
-		*/
 		const url = "http://127.0.0.1:3000/detect_pitch";
 		const fileData = fileReader.result
 			
@@ -47,6 +31,7 @@ function readFile(event) {
 			'file': fileData,
 			'id:': hash.digest('hex'),
 		}
+
 		fetch(url, {
 		    method : "POST",
 		    headers: {
@@ -66,6 +51,7 @@ function readFile(event) {
 		    html => console.log(html)
 		);
 	}
+	*/
 
 	wavesurfer = WaveSurfer.create({
 	    container: '#waveform',
