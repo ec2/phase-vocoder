@@ -1,6 +1,6 @@
+var WaveSurfer = require('wavesurfer')
 var TimelinePlugin = require('./node_modules/wavesurfer/plugin/wavesurfer.timeline.js');
 var uuidv4 = require('uuid/v4')
-var WaveSurfer = require('wavesurfer')
 
 let wavesurfer = null
 let numInputs = 0
