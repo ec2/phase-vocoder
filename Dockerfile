@@ -42,4 +42,4 @@ RUN octave --eval "pkg install /root/octave-pkg/control-3.1.0.tar.gz" \
     && octave --eval "pkg install /root/octave-pkg/statistics-1.4.0.tar.gz"
 
 
-CMD ["bash"]
+CMD ["node", "/root/phase-vocoder/src/server/index.js"]
