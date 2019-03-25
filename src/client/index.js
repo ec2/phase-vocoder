@@ -146,6 +146,9 @@ function submit(event) {
 	fetch(url, {
 	    method : "POST",
 	    body: JSON.stringify(payload),
+	    headers: {
+            "Content-Type": "application/json",
+        },
 	    // -- or --
 	    // body : JSON.stringify({
 	        // user : document.getElementById('user').value,
