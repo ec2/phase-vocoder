@@ -13,23 +13,14 @@ let currentUid = null
 function readFile(event) {
 	/*
 	Handler for the "Choose file" button.
-	It reads the file into base64 encoding and sends this to the ??? endpoint.
+	It reads the file into base64 encoding and sends this to the detect_pitch endpoint.
 	It also loads the file for WaveSurfer for playing and seeking.
 	*/
-	console.log('readfile')
 	event.preventDefault()
 	var fileReader = new FileReader();
-	// const path = event.target.files[0].path
+
 	var selectForm = document.forms[0];
 	const path = selectForm.sampleFile.files[0].path
-	console.log('readfile', path)
-
-	console.log(selectForm)
-	// const hash = new SHA3(256);
- 
-	// hash.update(fileData);
-
-	// selectForm.uid = hash.digest('hex')
 
 	wavesurfer = WaveSurfer.create({
 	    container: '#waveform',
@@ -52,18 +43,10 @@ function readFile(event) {
 	fetch(url, {
 	    method : "POST",
 	    body: formData,
-	    // -- or --
-	    // body : JSON.stringify({
-	        // user : document.getElementById('user').value,
-	        // ...
-	    // })
 	}).then(
-		// DO SOMETHING
-	    // response => response.text() // .json(), etc.
-	    // same as function(response) {return response.text();}
 	    function(response) {
-	    	console.log(response)
 	    	currentUid = response.uid
+	    	// Do something with response.pitch [0,0,0,...]
 	    }
 	)
 	event.preventDefault()
@@ -98,7 +81,10 @@ function addInput(num) {
 	pitchInput.id = `inputs_pitch_${num}`
 
 	var inputsTable = document.getElementById('inputs_table')
-	var row = inputsTable.insertRow(num)
+
+	// children[0].children.length
+	var numRows = inputsTable.children[0].children.length
+	var row = inputsTable.insertRow(numRows)
 	row.id = `inputs_row_${num}`
 	var aCell = row.insertCell(0)
 	var bCell = row.insertCell(1)
@@ -123,7 +109,7 @@ function removeInput(event) {
 
 function submit(event) {
 	/*
-	Gets the form data and sends it to the ??? endpoint
+	Gets the form data and sends it to the correct_pitch endpoint
 	*/
 	const len = event.target.length
 	var pitch_shifts = []
@@ -151,20 +137,12 @@ function submit(event) {
 	    headers: {
             "Content-Type": "application/json",
         },
-	    // -- or --
-	    // body : JSON.stringify({
-	        // user : document.getElementById('user').value,
-	        // ...
-	    // })
 	}).then(
-		// DO SOMETHING
+	
 	    response => response.text() // .json(), etc.
 	    // same as function(response) {return response.text();}
-	).then(
-	    html => console.log(html)
-	);
+	)
 
-	// don't submit for now TODO
 	event.preventDefault()
 }
 
