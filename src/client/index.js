@@ -1,18 +1,20 @@
 var WaveSurfer = require('wavesurfer')
 var TimelinePlugin = require('./node_modules/wavesurfer/plugin/wavesurfer.timeline.js'); 
 var { SHA3 } = require('sha3')
+var FileSaver = require('file-saver');
 
 var Chart = require('chart.js')
 
 let wavesurfer = null
 let numInputs = 0
 let currentUid = null
+let currentName = null
 
 function generatePitchGraph(pitchData, gc=500) {
 	const dataLength = pitchData.length
     var data = [];
     for (var x = 0; x < dataLength; x+=gc) {
-        data.push({x: x/44100, y: pitchData[x]})
+        data.push({x: x/4410, y: pitchData[x]})
     }
     var options = {
         title: {
@@ -48,6 +50,7 @@ function readFile(event) {
 
     var fileForm = document.forms[0];
     const path = fileForm.sampleFile.files[0].path
+    currentName = path
 
     const waveformElement = document.getElementById('waveform')
     if (waveformElement.children.length) {
@@ -71,7 +74,7 @@ function readFile(event) {
     	console.log('DEBUG: ready to play file')
     })
 
-    const url = "http://127.0.0.1:3000/detect_pitch"
+    const url = "http://0.0.0.0:3000/detect_pitch"
     const formData = new FormData(fileForm)
 
     // Send the data and graph stuff
@@ -182,15 +185,31 @@ function submit(event) {
     })
     .then(
     	function(response) {
-			return response.text();
+			return response.blob();
 			// return response.json()
 		})
     .then(
-        function(responseBody) {
-        	console.log('aaa', responseBody)
-		    var result = document.getElementById('result')
+        function(blob) {
+            const resultDiv = document.getElementById('result')
+            resultDiv.style = "display: block"
+            wavesurfer2 = WaveSurfer.create({
+                container: '#result_waveform',
+            });
 
-		}
+            WaveSurfer.Timeline.init({
+                wavesurfer: wavesurfer2,
+                container: "#result_wave-timeline"
+            });
+
+            // Load the uploaded file so it can be played
+            wavesurfer2.loadBlob(blob);
+            wavesurfer2.on('ready', function () {
+                console.log('DEBUG: ready to play file')
+                const playPauseButton = document.getElementById('result_button_play_pause')
+                playPauseButton.onclick = () => { wavesurfer2.playPause() }
+            })
+            saveAs(blob, currentName + "changed" +".wav");
+        }
     )
 
     event.preventDefault()
