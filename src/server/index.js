@@ -3,9 +3,7 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser')
-const url = require
 const fs = require('fs');
-const path = require('path');
 const timeout = require('connect-timeout'); //express v4
 
 const app = express();
