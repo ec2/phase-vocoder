@@ -24,9 +24,8 @@ function generatePitchGraph(pitchData, gc=500) {
         responsive: true,
         maintainAspectRatio: false, 
     }
-
-    var ctx = document.getElementById('pitchChart').getContext('2d');
-    var chart = new Chart(ctx, {
+    var ctx = document.getElementById('pitchChart').getContext('2d')
+    const chart = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [{
@@ -62,6 +61,19 @@ function readFile(event) {
         }
     }
 
+    // Clear any existing pitch graph
+    const loadingTextElement = document.getElementById('loadingText')
+    loadingTextElement.style="display: block"
+    const pitchElement = document.getElementById('pitchChart')
+    if (pitchElement.children.length) {
+        for (var x = 0; x < pitchElement.children.length; ++x) {
+            pitchElement.children[x].remove()
+        }
+    }
+    var canvas = document.getElementById('pitchChart')
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
     wavesurfer = WaveSurfer.create({
         container: '#waveform',
     });
@@ -95,6 +107,7 @@ function readFile(event) {
         	currentUid = responseBody.uid
      		pitchValues = pitchValues.split(',').map(el => parseInt(el))
      		generatePitchGraph(pitchValues)
+            loadingTextElement.style="display: none"
         })
 }
 
