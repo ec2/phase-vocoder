@@ -10,7 +10,7 @@ let numInputs = 0
 let currentUid = null
 let currentName = null
 
-function generatePitchGraph(pitchData, gc=100) {
+function generatePitchGraph(pitchData, gc=25) {
 	const dataLength = pitchData.length
     var data = [];
     for (var x = 0; x < dataLength; x+=gc) {
@@ -39,6 +39,15 @@ function generatePitchGraph(pitchData, gc=100) {
     });
 }
 
+function clearChildren(elementId) {
+    const element = document.getElementById(elementId)
+    if (element.children.length) {
+        for (var x = 0; x < element.children.length; ++x) {
+            element.children[x].remove()
+        }
+    }
+}
+
 function readFile(event) {
     /*
     Handler for the "Choose file" button.
@@ -54,22 +63,9 @@ function readFile(event) {
     currentName = fileForm.sampleFile.files[0].name.split('.')[0]
 
     // Clear any existing waveforms
-    const waveformElement = document.getElementById('waveform')
-    if (waveformElement.children.length) {
-        for (var x = 0; x < waveformElement.children.length; ++x) {
-            waveformElement.children[x].remove()
-        }
-    }
-
-    // Clear any existing pitch graph
-    const loadingTextElement = document.getElementById('loadingText')
-    loadingTextElement.style="display: block"
-    const pitchElement = document.getElementById('pitchChart')
-    if (pitchElement.children.length) {
-        for (var x = 0; x < pitchElement.children.length; ++x) {
-            pitchElement.children[x].remove()
-        }
-    }
+    clearChildren('waveform')
+    clearChildren('pitchChart') // TODO: this shit is fucked (see below)
+    // TODO: reset the canvas here; delete and create again
     var canvas = document.getElementById('pitchChart')
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -107,6 +103,7 @@ function readFile(event) {
         	currentUid = responseBody.uid
      		pitchValues = pitchValues.split(',').map(el => parseInt(el))
      		generatePitchGraph(pitchValues)
+            const loadingTextElement = document.getElementById('loadingText')
             loadingTextElement.style="display: none"
         })
 }
