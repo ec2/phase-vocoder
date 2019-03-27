@@ -79,6 +79,7 @@ function readFile(event) {
 	.then(
         function(responseBody) {
         	var pitchValues = responseBody.pitch
+        	currentUid = responseBody.uid
      		pitchValues = pitchValues.split(',').map(el => parseInt(el))
      		generatePitchGraph(pitchValues)
         })
@@ -99,7 +100,7 @@ function addInput(num) {
     const timePattern = "[0-9]+.?[0-9]*"
     aInput.pattern = timePattern
     bInput.pattern = timePattern
-    pitchInput.pattern= "[A-Ga-g][1-9](#|B|b)?"
+    pitchInput.pattern= "[A-Ga-g](s|b)?[0-8]"
 
     removeButton.onclick = removeInput
     removeButton.id = `inputs_remove_${num}`

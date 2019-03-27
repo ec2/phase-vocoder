@@ -96,7 +96,7 @@ app.post('/correct_pitch', (req, res) => {
 
     console.log(paramStr)
 
-    dir = exec(`cd /root/phase-vocoder/src/octave-src/ && /root/phase-vocoder/src/octave-src/run_pitch_shift.m ${paramStr}`, function (err, stdout, stderr) {
+    dir = exec(`cd /root/phase-vocoder/src/octave-src/ && /root/phase-vocoder/src/octave-src/run_pitch_shift.m ${uid} ${paramStr}`, function (err, stdout, stderr) {
         if (err) {
             console.log (err)
             return res.status(666).send(err);
