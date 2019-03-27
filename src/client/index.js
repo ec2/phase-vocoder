@@ -47,11 +47,14 @@ function readFile(event) {
     It also loads the file for WaveSurfer for playing and seeking.
     */
     event.preventDefault()
+    const resultDiv = document.getElementById('result')
+    resultDiv.style = "display: none"
 
     var fileForm = document.forms[0];
     const path = fileForm.sampleFile.files[0].path
-    currentName = path
+    currentName = fileForm.sampleFile.files[0].name.split('.')[0]
 
+    // Clear any existing waveforms
     const waveformElement = document.getElementById('waveform')
     if (waveformElement.children.length) {
         for (var x = 0; x < waveformElement.children.length; ++x) {
@@ -191,6 +194,13 @@ function submit(event) {
     .then(
         function(blob) {
             const resultDiv = document.getElementById('result')
+                // Clear any existing waveforms
+            const waveformElement = document.getElementById('result_waveform')
+            if (waveformElement.children.length) {
+                for (var x = 0; x < waveformElement.children.length; ++x) {
+                    waveformElement.children[x].remove()
+                }
+            }
             resultDiv.style = "display: block"
             wavesurfer2 = WaveSurfer.create({
                 container: '#result_waveform',
@@ -208,7 +218,7 @@ function submit(event) {
                 const playPauseButton = document.getElementById('result_button_play_pause')
                 playPauseButton.onclick = () => { wavesurfer2.playPause() }
             })
-            saveAs(blob, currentName + "changed" +".wav");
+            saveAs(blob, currentName + "_shifted.wav");
         }
     )
 
@@ -235,7 +245,8 @@ window.addEventListener("load",
                     progress.innerHTML = `${wavesurfer.getCurrentTime()}` 
                 }
             },
-            100)
+            100
+        )
 
         // Add inputs listener
         var addInputButton = document.getElementById('inputs_add')
