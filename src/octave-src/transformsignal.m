@@ -9,7 +9,7 @@ function tsig = transformsignal(x, fs, f0_est, ranges, correct_notes)
     desired_freq = getfield(notes, correct_notes{1, i});
     avg_freq = mean(f0_est(l:r));
     frac = desired_freq / avg_freq;
-    corrected = correctsingle(x(l:r), frac, 0.0000001);
+    tsig(l:r) = correctsingle(x(l:r), frac, 0.0000001);
   endfor
 endfunction
 
