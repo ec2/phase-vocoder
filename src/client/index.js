@@ -10,7 +10,7 @@ let numInputs = 0
 let currentUid = null
 let currentName = null
 
-function generatePitchGraph(pitchData, gc=500) {
+function generatePitchGraph(pitchData, gc=100) {
 	const dataLength = pitchData.length
     var data = [];
     for (var x = 0; x < dataLength; x+=gc) {
@@ -231,7 +231,11 @@ function submit(event) {
                 const playPauseButton = document.getElementById('result_button_play_pause')
                 playPauseButton.onclick = () => { wavesurfer2.playPause() }
             })
-            saveAs(blob, currentName + "_shifted.wav");
+
+            const downloadButton = document.getElementById('result_download')
+            downloadButton.onclick = () => {
+                saveAs(blob, currentName + "_shifted.wav");
+            }
         }
     )
 
