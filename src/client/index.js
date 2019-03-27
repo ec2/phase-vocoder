@@ -66,6 +66,7 @@ function readFile(event) {
     clearChildren('waveform')
     clearChildren('pitchChart') // TODO: this shit is fucked (see below)
     // TODO: reset the canvas here; delete and create again
+    // TODO: do some state helpers stuff for loading and showing stuff
     var canvas = document.getElementById('pitchChart')
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
