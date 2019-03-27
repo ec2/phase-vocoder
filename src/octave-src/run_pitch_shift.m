@@ -2,7 +2,7 @@
 pkg load signal; 
 pkg load statistics;
 uid = argv(){1}
-pitch_filename = sprintf("/tmp/%s/%s.csv", uid, uid);
+pitch_filename = sprintf("/tmp/%s/%s_orig.csv", uid, uid);
 audio_filename = sprintf("/tmp/%s/%s.wav", uid, uid);
 out_filename = sprintf("/tmp/%s/%s_shifted.wav", uid, uid);
 correction_times = [];
