@@ -1,18 +1,20 @@
 var WaveSurfer = require('wavesurfer')
 var TimelinePlugin = require('./node_modules/wavesurfer/plugin/wavesurfer.timeline.js'); 
 var { SHA3 } = require('sha3')
+var FileSaver = require('file-saver');
 
 var Chart = require('chart.js')
 
 let wavesurfer = null
 let numInputs = 0
 let currentUid = null
+let currentName = null
 
 function generatePitchGraph(pitchData, gc=500) {
 	const dataLength = pitchData.length
     var data = [];
     for (var x = 0; x < dataLength; x+=gc) {
-        data.push({x: x/44100, y: pitchData[x]})
+        data.push({x: x/4410, y: pitchData[x]})
     }
     var options = {
         title: {
@@ -22,9 +24,8 @@ function generatePitchGraph(pitchData, gc=500) {
         responsive: true,
         maintainAspectRatio: false, 
     }
-
-    var ctx = document.getElementById('pitchChart').getContext('2d');
-    var chart = new Chart(ctx, {
+    var ctx = document.getElementById('pitchChart').getContext('2d')
+    const chart = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [{
@@ -45,16 +46,33 @@ function readFile(event) {
     It also loads the file for WaveSurfer for playing and seeking.
     */
     event.preventDefault()
+    const resultDiv = document.getElementById('result')
+    resultDiv.style = "display: none"
 
     var fileForm = document.forms[0];
     const path = fileForm.sampleFile.files[0].path
+    currentName = fileForm.sampleFile.files[0].name.split('.')[0]
 
+    // Clear any existing waveforms
     const waveformElement = document.getElementById('waveform')
     if (waveformElement.children.length) {
         for (var x = 0; x < waveformElement.children.length; ++x) {
             waveformElement.children[x].remove()
         }
     }
+
+    // Clear any existing pitch graph
+    const loadingTextElement = document.getElementById('loadingText')
+    loadingTextElement.style="display: block"
+    const pitchElement = document.getElementById('pitchChart')
+    if (pitchElement.children.length) {
+        for (var x = 0; x < pitchElement.children.length; ++x) {
+            pitchElement.children[x].remove()
+        }
+    }
+    var canvas = document.getElementById('pitchChart')
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
     wavesurfer = WaveSurfer.create({
         container: '#waveform',
@@ -71,7 +89,7 @@ function readFile(event) {
     	console.log('DEBUG: ready to play file')
     })
 
-    const url = "http://127.0.0.1:3000/detect_pitch"
+    const url = "http://0.0.0.0:3000/detect_pitch"
     const formData = new FormData(fileForm)
 
     // Send the data and graph stuff
@@ -89,6 +107,7 @@ function readFile(event) {
         	currentUid = responseBody.uid
      		pitchValues = pitchValues.split(',').map(el => parseInt(el))
      		generatePitchGraph(pitchValues)
+            loadingTextElement.style="display: none"
         })
 }
 
@@ -182,15 +201,38 @@ function submit(event) {
     })
     .then(
     	function(response) {
-			return response.text();
+			return response.blob();
 			// return response.json()
 		})
     .then(
-        function(responseBody) {
-        	console.log('aaa', responseBody)
-		    var result = document.getElementById('result')
+        function(blob) {
+            const resultDiv = document.getElementById('result')
+                // Clear any existing waveforms
+            const waveformElement = document.getElementById('result_waveform')
+            if (waveformElement.children.length) {
+                for (var x = 0; x < waveformElement.children.length; ++x) {
+                    waveformElement.children[x].remove()
+                }
+            }
+            resultDiv.style = "display: block"
+            wavesurfer2 = WaveSurfer.create({
+                container: '#result_waveform',
+            });
 
-		}
+            WaveSurfer.Timeline.init({
+                wavesurfer: wavesurfer2,
+                container: "#result_wave-timeline"
+            });
+
+            // Load the uploaded file so it can be played
+            wavesurfer2.loadBlob(blob);
+            wavesurfer2.on('ready', function () {
+                console.log('DEBUG: ready to play file')
+                const playPauseButton = document.getElementById('result_button_play_pause')
+                playPauseButton.onclick = () => { wavesurfer2.playPause() }
+            })
+            saveAs(blob, currentName + "_shifted.wav");
+        }
     )
 
     event.preventDefault()
@@ -216,7 +258,8 @@ window.addEventListener("load",
                     progress.innerHTML = `${wavesurfer.getCurrentTime()}` 
                 }
             },
-            100)
+            100
+        )
 
         // Add inputs listener
         var addInputButton = document.getElementById('inputs_add')
