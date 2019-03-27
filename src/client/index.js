@@ -100,7 +100,7 @@ function addInput(num) {
     const timePattern = "[0-9]+.?[0-9]*"
     aInput.pattern = timePattern
     bInput.pattern = timePattern
-    pitchInput.pattern= "[A-Ga-g](s|b)?[0-8]"
+    pitchInput.pattern= "[A-Ga-g](s|S|b|B)?[0-8]"
 
     removeButton.onclick = removeInput
     removeButton.id = `inputs_remove_${num}`
@@ -144,13 +144,18 @@ function submit(event) {
     */
     const len = event.target.length
     var pitch_shifts = []
+
+    // sanitize for backend
+    function sanitizeNote(note) {
+        return note[0].toUpperCase() + note[1].toLowerCase() + (note.length > 2 ? note[2] : '')
+    }
     for (var i = 0; i < len; i++) {
         i += 1
         if (i + 2 >= len) break // lmao
         var shift = {
             'start_time': event.target[i].value,
             'end_time': event.target[i+1].value,
-            'desired_note': event.target[i+2].value,
+            'desired_note': sanitizeNote(event.target[i+2].value),
         }
         pitch_shifts.push(shift)
         i += 2
