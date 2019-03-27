@@ -8,7 +8,7 @@ let wavesurfer = null
 let numInputs = 0
 let currentUid = null
 
-function generatePitchGraph(pitchData, gc=1000) {
+function generatePitchGraph(pitchData, gc=500) {
 	const dataLength = pitchData.length
     var data = [];
     for (var x = 0; x < dataLength; x+=gc) {
@@ -48,6 +48,13 @@ function readFile(event) {
 
     var fileForm = document.forms[0];
     const path = fileForm.sampleFile.files[0].path
+
+    const waveformElement = document.getElementById('waveform')
+    if (waveformElement.children.length) {
+        for (var x = 0; x < waveformElement.children.length; ++x) {
+            waveformElement.children[x].remove()
+        }
+    }
 
     wavesurfer = WaveSurfer.create({
         container: '#waveform',
