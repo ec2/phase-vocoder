@@ -1,5 +1,5 @@
 
-
+const chalk = require('chalk');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser')
@@ -15,7 +15,7 @@ app.use((request, response, next) => {
     next()
 })
 
-app.use(timeout(1200000));
+app.use(timeout(2400000));
 app.use(haltOnTimedout);
 
 function haltOnTimedout(req, res, next){
@@ -44,11 +44,11 @@ app.post('/detect_pitch', (req, res) => {
     if (Object.keys(req.files).length == 0) {
         return res.status(400).send('No files were uploaded.');
     }
-    console.log("REQ FILES ", req.files)
     let sampleFile = req.files.sampleFile;
     let uid = sampleFile.md5
     let dirPath = `/tmp/${uid}`;
     let filePath = dirPath + `/${uid}.wav`;
+    console.log(chalk.yellow("Detect Pitch Requested UID: "), uid)
 
     let dirPathExists = fs.existsSync(dirPath);
     let filePathExists = fs.existsSync(filePath);
@@ -60,7 +60,7 @@ app.post('/detect_pitch', (req, res) => {
     if (filePathExists) {
         fs.readFile(`/tmp/${uid}/${uid}.csv`, (err, data) => {
             if (err) {
-                console.log(err)
+                console.log(chalk.red(err))
                 return res.send(667).send(err);
             }
             const returnObj = {
@@ -68,26 +68,29 @@ app.post('/detect_pitch', (req, res) => {
                 pitch: data.toString(),
                 uid: uid
             }
-            console.log("response!")
+            console.log(chalk.green("Detect Pitch Success UID: "), uid)
             res.send(JSON.stringify(returnObj))
         });
     } else {
 
         sampleFile.mv(filePath, function (err) {
             if (err) {
-                console.log(err)
+                console.log(chalk.red(err))
                 return res.status(500).send(err);
             }
             // run the octave script in a shell
             dir = exec(`cd /root/phase-vocoder/src/octave-src/ && /root/phase-vocoder/src/octave-src/run_pitch_detection.m ${uid}`, function (err, stdout, stderr) {
                 if (err) {
-                    console.log(err)
+                    console.log(chalk.red(err))
                     return res.status(666).send(err);
                 }
+
+                console.log("Octave stdout: ", stdout)
+                console.log("Octave stderr: ", stderr)
                 // reads the csv file to be returned. 
                 fs.readFile(`/tmp/${uid}/${uid}.csv`, (err, data) => {
                     if (err) {
-                        console.log(err)
+                        console.log(chalk.red(err))
                         return res.send(667).send(err);
                     }
                     const returnObj = {
@@ -95,7 +98,7 @@ app.post('/detect_pitch', (req, res) => {
                         pitch: data.toString(),
                         uid: uid
                     }
-                    console.log("response!")
+                    console.log(chalk.green("Detect Pitch Success UID: "), uid)
                     res.send(JSON.stringify(returnObj))
                 });
             });
@@ -116,7 +119,9 @@ app.post('/correct_pitch', (req, res) => {
     const pitch_shifts = body.pitch_shifts;
     let paramStr = "";
 
-    console.log(pitch_shifts)
+    console.log (chalk.yellow("--- Correct Pitch Requested with Params ---"))
+    console.log("UID: ", uid)
+    console.log("Params: ", chalk.yellow(JSON.stringify(pitch_shifts)))
 
     for (let i = 0; i < pitch_shifts.length; i++) {
         const start = pitch_shifts[i].start_time;
@@ -126,16 +131,20 @@ app.post('/correct_pitch', (req, res) => {
         paramStr += ` ${start} ${end} ${note} `
     }
 
-    console.log(paramStr)
 
     dir = exec(`cd /root/phase-vocoder/src/octave-src/ && /root/phase-vocoder/src/octave-src/run_pitch_shift.m ${uid} ${paramStr}`, function (err, stdout, stderr) {
         if (err) {
             console.log("Error: ", err)
+            console.log("Octave stdout: ", stdout)
+            console.log("Octave stderr: ", stderr)
             return res.status(666).send(err);
         }
-        console.log('Done Shifting')
+        console.log("Octave stdout: ", stdout)
+        console.log("Octave stderr: ", stderr)
+        console.log(chalk.green('Done Shifting for: ') , uid)
         res.download(`/tmp/${uid}/${uid}_shifted.wav`)
     });
 });
 
+console.log(chalk.green("Server Start!"))
 app.listen(3000);
