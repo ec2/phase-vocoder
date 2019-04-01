@@ -4,7 +4,7 @@ npm install
 cd -
 
 cd ./src/client/
-yarn install 
+npm install 
 cd -
 
 docker build -t tueric/phase-vocoder .
