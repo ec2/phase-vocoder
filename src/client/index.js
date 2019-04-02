@@ -24,7 +24,19 @@ function generatePitchGraph(pitchData, gc=25) {
         responsive: true,
         maintainAspectRatio: false, 
     }
-    var ctx = document.getElementById('pitchChart').getContext('2d')
+    // delete existing canvases
+    var previousCanvas = document.getElementById('pitchChart')
+    if (previousCanvas) {
+       previousCanvas.remove()
+    }
+
+    var pitchContainer = document.getElementById('pitchGraphContainer')
+    var canvasElement = document.createElement('canvas')
+    canvasElement.id = 'pitchChart'
+    canvasElement.height = 600
+    var ctx = canvasElement.getContext('2d')
+    pitchContainer.appendChild(canvasElement)
+
     const chart = new Chart(ctx, {
         type: 'scatter',
         data: {
@@ -64,12 +76,6 @@ function readFile(event) {
 
     // Clear any existing waveforms
     clearChildren('waveform')
-    clearChildren('pitchChart') // TODO: this shit is fucked (see below)
-    // TODO: reset the canvas here; delete and create again
-    // TODO: do some state helpers stuff for loading and showing stuff
-    var canvas = document.getElementById('pitchChart')
-    const context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
 
     wavesurfer = WaveSurfer.create({
         container: '#waveform',
