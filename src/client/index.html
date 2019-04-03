@@ -11,20 +11,12 @@
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
+        font-family: "Geneva";
         margin: 4px 2px;
         cursor: pointer;
       }
-      .button-red {
-        background-color: #FC2A2A;
-        border: none;
-        color: white;
-        padding: 10px 24px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
+      .text {
+        font-family: "Geneva";
       }
     </style>
     <meta charset="UTF-8">
@@ -52,9 +44,9 @@
       <form id="form" method="post">
         <table id="inputs_table" style="margin: 0px auto; width:70%">
           <tr style="text-align: left">
-            <th>Start time (seconds)</th>
-            <th>End time (seconds)</th>
-            <th>Pitch (e.g. Cb4, Ds5, F5)</th>
+            <th class="text">Start time (seconds)</th>
+            <th class="text">End time (seconds)</th>
+            <th class="text">Pitch (e.g. Cb4, Ds5, F5)</th>
             <th><button class="button"  id="inputs_add" type="button">Add</button></th>
           </tr>
         </table>
