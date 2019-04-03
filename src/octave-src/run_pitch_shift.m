@@ -1,6 +1,7 @@
 #! /usr/bin/octave -qf
 pkg load signal; 
 pkg load statistics;
+pkg load outliers;
 uid = argv(){1}
 pitch_filename = sprintf("/tmp/%s/%s_orig.csv", uid, uid);
 audio_filename = sprintf("/tmp/%s/%s.wav", uid, uid);
