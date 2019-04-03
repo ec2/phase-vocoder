@@ -39,7 +39,8 @@ WORKDIR /root/octave-pkg/
 RUN octave --eval "pkg install /root/octave-pkg/control-3.1.0.tar.gz" \
     && octave --eval "pkg install /root/octave-pkg/signal-1.4.0.tar.gz" \
     && octave --eval "pkg install /root/octave-pkg/io-2.4.12.tar.gz" \
-    && octave --eval "pkg install /root/octave-pkg/statistics-1.4.0.tar.gz"
+    && octave --eval "pkg install /root/octave-pkg/statistics-1.4.0.tar.gz" \
+    && octave --eval "pkg install /root/octave-pkg/outliers-0.13.9.tar.gz"
 
 
 CMD ["node", "/root/phase-vocoder/src/server/index.js"]
