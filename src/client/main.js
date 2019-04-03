@@ -10,12 +10,13 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true
-    }
+    },
   })
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
   mainWindow.maximize()
+  mainWindow.setResizable(false)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
