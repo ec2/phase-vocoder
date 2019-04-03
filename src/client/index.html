@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <style>
+      .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      .button-red {
+        background-color: #FC2A2A;
+        border: none;
+        color: white;
+        padding: 10px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+    </style>
     <meta charset="UTF-8">
     <title>Phase Vocoder</title>
     <script type="text/javascript" src="index.js"></script>
@@ -9,7 +35,7 @@
     <!-- All of the Node.js APIs are available in this renderer process. -->
     <form action="http://0.0.0.0:3000/detect_pitch" method="post" enctype="multipart/form-data" style="align-self: center;">
       <input type="file" name="sampleFile" accept=".wav">
-      <button type="button" id="audioFileChooser">Upload File</button>
+      <button class="button"  type="button" id="audioFileChooser">Upload File</button>
     </form>
     <div id="pitchGraphContainer" style="align-self: center;">
       <div id="loadingText" style="display: none">Loading...</div>
@@ -19,20 +45,20 @@
       <div id="wave-timeline"></div>
       <div id="menu-bar">
         <div id="menu-bar_progress">0:00</div>
-        <button id="button_play_pause" type="button">Play/Pause</button>
+        <button class="button" id="button_play_pause" type="button">Play/Pause</button>
       </div>
     </div>
     <div id="inputs">
       <form id="form" method="post">
-        <table id="inputs_table" style="width:100%">
+        <table id="inputs_table" style="margin: 0px auto; width:70%">
           <tr style="text-align: left">
-            <th>a (seconds)</th>
-            <th>b (seconds)</th> 
-            <th>pitch (e.g. Cb4, Ds5, F5)</th>
-            <th><button id="inputs_add" type="button">Add</button></th>
+            <th>Start time (seconds)</th>
+            <th>End time (seconds)</th>
+            <th>Pitch (e.g. Cb4, Ds5, F5)</th>
+            <th><button class="button"  id="inputs_add" type="button">Add</button></th>
           </tr>
         </table>
-        <button id="inputs_submit" type="submit">Submit</button>
+        <button class="button"  id="inputs_submit" type="submit">Submit</button>
       </form>
     </div>
     <div id="result" style="display: none; align-self: center;">
@@ -41,9 +67,9 @@
       <div id="result_waveform"></div>
       <div id="result_wave-timeline"></div>
       <div id="result_menu-bar">
-        <button id="result_button_play_pause" type="button">Play/Pause</button>
+        <button class="button"  id="result_button_play_pause" type="button">Play/Pause</button>
       </div>
-      <button id="result_download">Download</button>
+      <button class="button"  id="result_download">Download</button>
     </div>
     <script>
       // You can also require other files to run in this process
@@ -51,4 +77,3 @@
     </script>
   </body>
 </html>
-
