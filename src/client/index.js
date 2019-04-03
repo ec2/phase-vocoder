@@ -34,6 +34,7 @@ function generatePitchGraph(pitchData, gc=25) {
     var canvasElement = document.createElement('canvas')
     canvasElement.id = 'pitchChart'
     canvasElement.height = 600
+    canvasElement.width = 700
     var ctx = canvasElement.getContext('2d')
     pitchContainer.appendChild(canvasElement)
 
@@ -81,16 +82,17 @@ function readFile(event) {
         container: '#waveform',
     });
 
-    WaveSurfer.Timeline.init({
-        wavesurfer: wavesurfer,
-        container: "#wave-timeline"
-    });
-
     // Load the uploaded file so it can be played
     wavesurfer.load(path);
     wavesurfer.on('ready', function () {
     	console.log('DEBUG: ready to play file')
     })
+
+    WaveSurfer.Timeline.init({
+        wavesurfer: wavesurfer,
+        container: "#wave-timeline",
+        primaryLabelInterval: 1,
+    });
 
     const url = "http://0.0.0.0:3000/detect_pitch"
     const formData = new FormData(fileForm)
@@ -225,7 +227,8 @@ function submit(event) {
 
             WaveSurfer.Timeline.init({
                 wavesurfer: wavesurfer2,
-                container: "#result_wave-timeline"
+                container: "#result_wave-timeline",
+                primaryLabelInterval: 1,
             });
 
             // Load the uploaded file so it can be played

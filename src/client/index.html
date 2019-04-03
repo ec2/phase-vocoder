@@ -5,16 +5,16 @@
     <title>Phase Vocoder</title>
     <script type="text/javascript" src="index.js"></script>
   </head>
-  <body>
+  <body style="display: flex; flex-direction: column">
     <!-- All of the Node.js APIs are available in this renderer process. -->
-    <form action="http://0.0.0.0:3000/detect_pitch" method="post" enctype="multipart/form-data">
+    <form action="http://0.0.0.0:3000/detect_pitch" method="post" enctype="multipart/form-data" style="align-self: center;">
       <input type="file" name="sampleFile" accept=".wav">
       <button type="button" id="audioFileChooser">Upload File</button>
     </form>
-    <div id="pitchGraphContainer">
+    <div id="pitchGraphContainer" style="align-self: center;">
       <div id="loadingText" style="display: none">Loading...</div>
     </div>
-    <div>
+    <div style="align-self: center; width: 100%;">
       <div id="waveform"></div>
       <div id="wave-timeline"></div>
       <div id="menu-bar">
@@ -35,7 +35,7 @@
         <button id="inputs_submit" type="submit">Submit</button>
       </form>
     </div>
-    <div id="result" style="display: none">
+    <div id="result" style="display: none; align-self: center;">
       <hr>
       <h1>Result</h1>
       <div id="result_waveform"></div>
