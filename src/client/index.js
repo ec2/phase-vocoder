@@ -24,11 +24,6 @@ function generatePitchGraph(pitchData, gc=25) {
         responsive: true,
         maintainAspectRatio: false, 
     }
-    // delete existing canvases
-    var previousCanvas = document.getElementById('pitchChart')
-    if (previousCanvas) {
-       previousCanvas.remove()
-    }
 
     var pitchContainer = document.getElementById('pitchGraphContainer')
     var canvasElement = document.createElement('canvas')
@@ -77,6 +72,12 @@ function readFile(event) {
 
     // Clear any existing waveforms
     clearChildren('waveform')
+    
+    // delete existing canvases
+    var previousCanvas = document.getElementById('pitchChart')
+    if (previousCanvas) {
+       previousCanvas.remove()
+    }
 
     wavesurfer = WaveSurfer.create({
         container: '#waveform',
